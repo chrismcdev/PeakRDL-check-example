@@ -14,17 +14,17 @@ hosted runner.
   Markdown reports.
 - Pull requests that change SystemRDL files receive the normal review gate.
 
-The smoke test uses the immutable `v0.1.0` release so a passing run proves
+The smoke test uses the immutable `v0.1.1` release so a passing run proves
 that exact published version works for consumers.
 
 ## Use the action
 
 ```yaml
-- uses: actions/checkout@v4
+- uses: actions/checkout@v7
   with:
     fetch-depth: 0
 
-- uses: chrismcdev/PeakRDL-check/action@v0.1.0
+- uses: chrismcdev/PeakRDL-check/action@v0.1.1
   with:
     base-ref: ${{ github.event.pull_request.base.sha }}
     head-ref: ${{ github.event.pull_request.head.sha }}
