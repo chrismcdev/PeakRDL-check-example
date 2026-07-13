@@ -1,0 +1,48 @@
+name: Action smoke test
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  consumer-smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create a known breaking change
+        id: fixture
+        shell: bash
+        run: |
+          git config user.name "PeakRDL-check smoke test"
+          git config user.email "actions@users.noreply.github.com"
+          base_ref="$(git rev-parse HEAD)"
+          sed -i 's/ctrl @ 0x0/ctrl @ 0x40/' registers/uart.rdl
+          git add registers/uart.rdl
+          git commit -m "test: move the control register"
+          echo "base-ref=${base_ref}" >> "${GITHUB_OUTPUT}"
+          echo "head-ref=$(git rev-parse HEAD)" >> "${GITHUB_OUTPUT}"
+
+      - name: Run the released action
+        id: review
+        uses: chrismcdev/PeakRDL-check/action@v0.1.0
+        with:
+          base-ref: ${{ steps.fixture.outputs.base-ref }}
+          head-ref: ${{ steps.fixture.outputs.head-ref }}
+          fail-on: none
+
+      - name: Verify the breaking change was detected
+        shell: bash
+        env:
+          BREAKING_COUNT: ${{ steps.review.outputs.breaking-count }}
+        run: |
+          if (( BREAKING_COUNT < 1 )); then
+            echo "Expected at least one breaking change, got ${BREAKING_COUNT}" >&2
+            exit 1
+          fi
