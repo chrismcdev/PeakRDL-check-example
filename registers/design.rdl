@@ -1,14 +1,7 @@
 `include "uart.rdl"
+`include "800k.rdl"
 
 addrmap example {
     uart uart;
-
-    reg bulk_register {
-        name = "Example register";
-        field {
-            sw = rw;
-            hw = r;
-            reset = 0x0;
-        } value[31:0];
-    } registers[799998] @ 0x1000 += 0x4;
+    bench800k_top registers @ 0x100000000;
 };

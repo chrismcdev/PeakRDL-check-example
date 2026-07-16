@@ -62,11 +62,3 @@ To enable previews:
 Railway detects the included [Dockerfile](Dockerfile), posts the preview URL
 on each pull request, updates it after new commits, and removes it when the
 pull request closes.
-
-[`registers/design.rdl`](registers/design.rdl) is the single entry point used
-for both the viewer and semantic diff. It combines the two UART registers with
-a compact 799,998-element register array, giving the example exactly 800,000
-registers without committing generated source files.
-
-At startup, [`preview-entrypoint.sh`](preview-entrypoint.sh) builds the index,
-compares the design with `main`, and serves it on Railway's assigned `PORT`.

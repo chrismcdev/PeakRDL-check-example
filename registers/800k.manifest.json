@@ -1,0 +1,45 @@
+{
+  "generator": "peakrdl-check-fixture",
+  "generatorVersion": 1,
+  "params": {
+    "registers": 799998,
+    "fields_per_register": 8,
+    "blocks": 802,
+    "duplicate_ratio": 0.4,
+    "hierarchy_depth": 4,
+    "address_maps": 2,
+    "array_ratio": 0.9,
+    "enum_ratio": 0.15,
+    "desc_words": 12,
+    "include_files": 4,
+    "param_ratio": 0.25,
+    "seed": 12345,
+    "name": "bench800k"
+  },
+  "topComponent": "bench800k_top",
+  "files": [
+    "800k.rdl",
+    "800k_types_0.rdl",
+    "800k_types_1.rdl",
+    "800k_types_2.rdl",
+    "800k_types_3.rdl"
+  ],
+  "checksums": {
+    "800k.rdl": "aee8ca22a55ef37270a5301d91909412812516889ff2374bb4a588bd19f983ba",
+    "800k_types_0.rdl": "4b389765c410583ddff0ae915004f257d0b5e670ad1e38d0a9e7cec4413ca245",
+    "800k_types_1.rdl": "9705eb30bd523a2ee3cdd5b9eebdd829d4e894754134e46823df6b979aa4b547",
+    "800k_types_2.rdl": "5eb0afe486a8b8d270c5cbe55c4ed382925ce88b8e45f8b2c5bc8d73125259c4",
+    "800k_types_3.rdl": "04062161ccf7fa17e973ce5ac0f6fd0f5cdc62a54dc72362bce0ecf41a2d7e61"
+  },
+  "sourceLines": 881998,
+  "sourceBytes": 107346906,
+  "expected": {
+    "registers": 799998,
+    "fields": 6399984,
+    "registerDefs": 66945,
+    "blockTypes": 641,
+    "blockInstances": 802,
+    "enumTypes": 1282
+  },
+  "generationSeconds": 1.641
+}
