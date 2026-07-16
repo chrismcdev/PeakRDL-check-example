@@ -31,7 +31,8 @@ that exact published version works for consumers.
     fail-on: breaking
 ```
 
-See [registers/uart.rdl](registers/uart.rdl) for the example register map and
+See [registers/design.rdl](registers/design.rdl) for the project entry point,
+[registers/uart.rdl](registers/uart.rdl) for the UART block, and
 [the pull-request workflow](.github/workflows/register-review.yml) for the
 complete configuration.
 
@@ -45,4 +46,26 @@ complete configuration.
 PeakRDL-check will annotate the address change, add a job summary, upload the
 review reports and fail the gate.
 
-Licensed under Apache-2.0.
+## Interactive pull-request preview
+
+This repository can also deploy a register-map viewer for each pull request
+using [Railway PR environments](https://docs.railway.com/guides/preview-deployments-with-pr-environments).
+The preview shows the new register map and its semantic changes; the GitHub
+Action above remains the CI gate.
+
+To enable previews:
+
+1. Create a Railway project from this GitHub repository.
+2. Generate a Railway domain for the service.
+3. In **Project Settings → Environments**, enable **PR Environments**.
+
+Railway detects the included [Dockerfile](Dockerfile), posts the preview URL
+on each pull request, updates it after new commits, and removes it when the
+pull request closes. The container builds `registers/design.rdl`, compares it
+with `main`, and serves the result on Railway's generated URL. The
+[`preview-entrypoint.sh`](preview-entrypoint.sh) script performs that one-time
+build and then starts the viewer.
+
+`registers/design.rdl` is the entry point for the complete register map. Add
+new RDL source files with `` `include `` directives there so both the viewer
+and semantic diff compile the whole design.
