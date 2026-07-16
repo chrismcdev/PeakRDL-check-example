@@ -62,3 +62,9 @@ To enable previews:
 Railway detects the included [Dockerfile](Dockerfile), posts the preview URL
 on each pull request, updates it after new commits, and removes it when the
 pull request closes.
+
+The Docker build creates the index and compares the complete design with
+`main`. A cold build takes about four minutes and peaks around 9.5 GB of
+memory, so image builds take several minutes. The deployed container only
+opens the finished index and serves it on Railway's assigned `PORT`, keeping
+startup fast and memory usage low.
