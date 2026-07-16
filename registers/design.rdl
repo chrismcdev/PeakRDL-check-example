@@ -2,4 +2,13 @@
 
 addrmap example {
     uart uart;
+
+    reg bulk_register {
+        name = "Example register";
+        field {
+            sw = rw;
+            hw = r;
+            reset = 0x0;
+        } value[31:0];
+    } registers[799998] @ 0x1000 += 0x4;
 };

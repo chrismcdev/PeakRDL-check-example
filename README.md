@@ -48,10 +48,10 @@ review reports and fail the gate.
 
 ## Interactive pull-request preview
 
-This repository can also deploy a register-map viewer for each pull request
-using [Railway PR environments](https://docs.railway.com/guides/preview-deployments-with-pr-environments).
-The preview shows the new register map and its semantic changes; the GitHub
-Action above remains the CI gate.
+This repository can also deploy a temporary viewer for each pull request using
+[Railway PR environments](https://docs.railway.com/guides/preview-deployments-with-pr-environments).
+The preview contains the complete 800,000-register example map and its semantic
+changes. The GitHub Action above remains the CI gate.
 
 To enable previews:
 
@@ -61,11 +61,12 @@ To enable previews:
 
 Railway detects the included [Dockerfile](Dockerfile), posts the preview URL
 on each pull request, updates it after new commits, and removes it when the
-pull request closes. The container builds `registers/design.rdl`, compares it
-with `main`, and serves the result on Railway's generated URL. The
-[`preview-entrypoint.sh`](preview-entrypoint.sh) script performs that one-time
-build and then starts the viewer.
+pull request closes.
 
-`registers/design.rdl` is the entry point for the complete register map. Add
-new RDL source files with `` `include `` directives there so both the viewer
-and semantic diff compile the whole design.
+[`registers/design.rdl`](registers/design.rdl) is the single entry point used
+for both the viewer and semantic diff. It combines the two UART registers with
+a compact 799,998-element register array, giving the example exactly 800,000
+registers without committing generated source files.
+
+At startup, [`preview-entrypoint.sh`](preview-entrypoint.sh) builds the index,
+compares the design with `main`, and serves it on Railway's assigned `PORT`.
