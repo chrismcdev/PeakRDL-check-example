@@ -16,7 +16,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: chrismcdev/PeakRDL-check/action@v0.2.1
+      - uses: chrismcdev/PeakRDL-check/action@v0.2.2
         with:
           base-ref: ${{ github.event.pull_request.base.sha }}
           head-ref: ${{ github.event.pull_request.head.sha }}
