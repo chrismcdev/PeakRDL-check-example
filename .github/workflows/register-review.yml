@@ -8,13 +8,29 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: register-review-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   peakrdl-check:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+
+      # Diffing a modified large register map peaks around 10 GB, which is
+      # marginal on hosted runners; swap lets the compile grind through
+      # instead of the runner being OOM-killed ("The operation was canceled").
+      - name: Add swap for large register map compiles
+        run: |
+          sudo fallocate -l 12G /mnt/swapfile
+          sudo chmod 600 /mnt/swapfile
+          sudo mkswap /mnt/swapfile
+          sudo swapon /mnt/swapfile
+          free -h
 
       - uses: chrismcdev/PeakRDL-check/action@v0.2.2
         with:
