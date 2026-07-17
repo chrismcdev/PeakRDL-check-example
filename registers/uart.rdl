@@ -1,12 +1,13 @@
 addrmap uart {
     reg {
         name = "UART control";
+        desc = "Control register for the UART core.";
         field {
-            sw = rw;
+            sw = r;
             hw = r;
-            reset = 0x0;
+            reset = 0x1;
         } enable[0:0];
-    } ctrl @ 0x0;
+    } ctrl @ 0x40;
 
     reg {
         name = "UART status";
@@ -14,5 +15,18 @@ addrmap uart {
             sw = r;
             hw = w;
         } busy[0:0];
+        field {
+            sw = r;
+            hw = w;
+        } overflow[1:1];
     } status @ 0x4;
+
+    reg {
+        name = "UART baud divisor";
+        field {
+            sw = rw;
+            hw = r;
+            reset = 0x0;
+        } div[15:0];
+    } baud @ 0x8;
 };
