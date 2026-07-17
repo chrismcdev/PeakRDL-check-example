@@ -63,8 +63,12 @@ Railway detects the included [Dockerfile](Dockerfile), posts the preview URL
 on each pull request, updates it after new commits, and removes it when the
 pull request closes.
 
-The Docker build creates the index and compares the complete design with
-`main`. A cold build takes about four minutes and peaks around 9.5 GB of
-memory, so image builds take several minutes. The deployed container only
+The 800k example map ([registers/800k.rdl](registers/800k.rdl)) is a
+standalone entry file rather than part of `design.rdl`: adding a whole new
+register map is cheap for the CI gate (no base revision to diff against),
+while modifying an existing 800k-register map requires a full ~10 GB compile
+that exceeds standard hosted runners. The Docker build indexes the 800k map
+and diffs it against `main`. A cold build takes about four minutes and peaks
+around 10 GB of memory, so image builds take several minutes. The deployed container only
 opens the finished index and serves it on Railway's assigned `PORT`, keeping
 startup fast and memory usage low.
