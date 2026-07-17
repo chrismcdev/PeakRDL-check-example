@@ -48,10 +48,10 @@ review reports and fail the gate.
 
 ## Interactive pull-request preview
 
-This repository can also deploy a register-map viewer for each pull request
-using [Railway PR environments](https://docs.railway.com/guides/preview-deployments-with-pr-environments).
-The preview shows the new register map and its semantic changes; the GitHub
-Action above remains the CI gate.
+This repository can also deploy a temporary viewer for each pull request using
+[Railway PR environments](https://docs.railway.com/guides/preview-deployments-with-pr-environments).
+The preview contains the complete 800,000-register example map and its semantic
+changes. The GitHub Action above remains the CI gate.
 
 To enable previews:
 
@@ -61,11 +61,14 @@ To enable previews:
 
 Railway detects the included [Dockerfile](Dockerfile), posts the preview URL
 on each pull request, updates it after new commits, and removes it when the
-pull request closes. The container builds `registers/design.rdl`, compares it
-with `main`, and serves the result on Railway's generated URL. The
-[`preview-entrypoint.sh`](preview-entrypoint.sh) script performs that one-time
-build and then starts the viewer.
+pull request closes.
 
-`registers/design.rdl` is the entry point for the complete register map. Add
-new RDL source files with `` `include `` directives there so both the viewer
-and semantic diff compile the whole design.
+The 800k example map ([registers/800k.rdl](registers/800k.rdl)) is a
+standalone entry file rather than part of `design.rdl`: adding a whole new
+register map is cheap for the CI gate (no base revision to diff against),
+while modifying an existing 800k-register map requires a full ~10 GB compile
+that exceeds standard hosted runners. The Docker build indexes the 800k map
+and diffs it against `main`. A cold build takes about four minutes and peaks
+around 10 GB of memory, so image builds take several minutes. The deployed container only
+opens the finished index and serves it on Railway's assigned `PORT`, keeping
+startup fast and memory usage low.
