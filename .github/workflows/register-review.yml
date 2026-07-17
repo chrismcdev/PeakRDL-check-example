@@ -21,9 +21,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Diffing a modified large register map peaks around 10 GB, which is
-      # marginal on hosted runners; swap lets the compile grind through
-      # instead of the runner being OOM-killed ("The operation was canceled").
+      # With a primed index cache the review only splices changed files
+      # (~1-3 min even at 800k registers). Swap covers the fallback paths —
+      # a cold cache or a change the incremental splicer can't handle —
+      # where a full ~10 GB compile would otherwise OOM-kill the runner.
       - name: Add swap for large register map compiles
         run: |
           sudo fallocate -l 12G /mnt/swapfile

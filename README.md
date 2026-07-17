@@ -59,6 +59,11 @@ To enable previews:
 2. Generate a Railway domain for the service.
 3. In **Project Settings → Environments**, enable **PR Environments**.
 
+A push to `main` also runs the [index-prime workflow](.github/workflows/prime-index-cache.yml),
+which builds and caches a register-map index for every entry file. Pull-request
+reviews restore that cache and incrementally splice only the changed files, so
+even 800k-register maps review in a couple of minutes.
+
 Railway detects the included [Dockerfile](Dockerfile), posts the preview URL
 on each pull request, updates it after new commits, and removes it when the
 pull request closes.

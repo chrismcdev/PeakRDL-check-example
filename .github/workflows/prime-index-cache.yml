@@ -1,0 +1,43 @@
+name: Prime register index cache
+
+# Builds and caches a register-map index for every entry file on each push
+# to main. Pull-request reviews restore this cache and only need to splice
+# the changed files incrementally, so even 800k-register maps review in a
+# couple of minutes instead of recompiling both revisions.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: prime-index-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  prime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      # A cold 800k-register build peaks around 10 GB, marginal on hosted
+      # runners; swap lets it complete instead of being OOM-killed.
+      - name: Add swap for large register map compiles
+        run: |
+          sudo fallocate -l 12G /mnt/swapfile
+          sudo chmod 600 /mnt/swapfile
+          sudo mkswap /mnt/swapfile
+          sudo swapon /mnt/swapfile
+          free -h
+
+      - uses: chrismcdev/PeakRDL-check/action@v0.3.0
+        with:
+          mode: prime
+          base-ref: ${{ github.sha }}
+          head-ref: ${{ github.sha }}
