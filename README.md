@@ -14,7 +14,7 @@ hosted runner.
   Markdown reports.
 - Pull requests that change SystemRDL files receive the normal review gate.
 
-The smoke test uses the immutable `v0.2.2` release so a passing run proves
+The smoke test uses the immutable `v0.3.0` release so a passing run proves
 that exact published version works for consumers.
 
 ## Use the action
@@ -24,7 +24,7 @@ that exact published version works for consumers.
   with:
     fetch-depth: 0
 
-- uses: chrismcdev/PeakRDL-check/action@v0.2.2
+- uses: chrismcdev/PeakRDL-check/action@v0.3.0
   with:
     base-ref: ${{ github.event.pull_request.base.sha }}
     head-ref: ${{ github.event.pull_request.head.sha }}
@@ -58,6 +58,11 @@ To enable previews:
 1. Create a Railway project from this GitHub repository.
 2. Generate a Railway domain for the service.
 3. In **Project Settings → Environments**, enable **PR Environments**.
+
+A push to `main` also runs the [index-prime workflow](.github/workflows/prime-index-cache.yml),
+which builds and caches a register-map index for every entry file. Pull-request
+reviews restore that cache and incrementally splice only the changed files, so
+even 800k-register maps review in a couple of minutes.
 
 Railway detects the included [Dockerfile](Dockerfile), posts the preview URL
 on each pull request, updates it after new commits, and removes it when the
