@@ -31,7 +31,7 @@ jobs:
 
       - name: Run the released action
         id: review
-        uses: chrismcdev/PeakRDL-check/action@v0.2.0
+        uses: chrismcdev/PeakRDL-check/action@v0.2.1
         with:
           base-ref: ${{ steps.fixture.outputs.base-ref }}
           head-ref: ${{ steps.fixture.outputs.head-ref }}
