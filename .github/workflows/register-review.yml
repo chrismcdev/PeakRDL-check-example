@@ -32,7 +32,7 @@ jobs:
           sudo swapon /mnt/swapfile
           free -h
 
-      - uses: chrismcdev/PeakRDL-check/action@v0.2.2
+      - uses: chrismcdev/PeakRDL-check/action@v0.3.0
         with:
           base-ref: ${{ github.event.pull_request.base.sha }}
           head-ref: ${{ github.event.pull_request.head.sha }}

@@ -3,7 +3,7 @@ FROM python:3.12-slim
 RUN apt-get update \
     && apt-get install -y --no-install-recommends ca-certificates git \
     && rm -rf /var/lib/apt/lists/* \
-    && pip install --no-cache-dir peakrdl-check==0.2.2
+    && pip install --no-cache-dir peakrdl-check==0.3.0
 
 WORKDIR /app
 COPY . .
